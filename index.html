@@ -346,6 +346,7 @@ input[type=datetime-local].field-filled:focus,textarea.field-filled:focus{
   <div class="mobile-topbar-actions">
     <button class="mobile-action-btn" onclick="togglePetunjuk()">? Petunjuk</button>
     <button class="mobile-action-btn" onclick="showRecap()">&#128269; Rekap</button>
+    <button class="mobile-action-btn" onclick="logoutKuesioner()" style="color:#c53030">&#128274; Keluar</button>
   </div>
 </div>
 
@@ -404,6 +405,9 @@ input[type=datetime-local].field-filled:focus,textarea.field-filled:focus{
     </button>
     <button class="sidebar-btn" onclick="window.open('daftar.html','_blank')">
       <span class="sidebar-btn-icon">&#128196;</span> Daftar Entri
+    </button>
+    <button class="sidebar-btn" onclick="logoutKuesioner()" style="color:#c53030">
+      <span class="sidebar-btn-icon">&#128274;</span> Keluar
     </button>
   </div>
   <div style="padding:8px 16px 4px;margin-top:auto">
@@ -3503,6 +3507,7 @@ async function hashPassword(pw) {
 }
 
 async function checkPassword() {
+  if (!_activeHash) return;
   const pw = document.getElementById('pwInput').value;
   if (!pw) return;
   const h = await hashPassword(pw);
@@ -3516,12 +3521,28 @@ async function checkPassword() {
   }
 }
 
+function logoutKuesioner() {
+  sessionStorage.removeItem(PW_SESSION_KEY);
+  location.reload();
+}
+
 (async function() {
   if (sessionStorage.getItem(PW_SESSION_KEY) === '1') {
     document.getElementById('pwGate').style.display = 'none';
     return;
   }
+  const input = document.getElementById('pwInput');
+  const btn   = document.querySelector('#pwGate button');
+  input.disabled    = true;
+  input.placeholder = 'Memuat…';
+  btn.disabled      = true;
+
   await loadPasswordHash();
+
+  input.disabled    = false;
+  input.placeholder = 'Masukkan kata sandi';
+  btn.disabled      = false;
+  input.focus();
 })();
 </script>
 </body>

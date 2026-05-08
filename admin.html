@@ -329,7 +329,10 @@
 <!-- ─── Main Content ─── -->
 <div class="top-bar">
   <h1>Panel <span>Admin</span></h1>
-  <a href="daftar.html" class="btn-back">← Dashboard</a>
+  <div style="display:flex;gap:8px;align-items:center">
+    <a href="daftar.html" class="btn-back">← Dashboard</a>
+    <button onclick="logoutAdmin()" class="btn-back" style="cursor:pointer;border:1px solid #fed7d7;background:#fff5f5;color:#c53030">&#128274; Keluar</button>
+  </div>
 </div>
 
 <!-- Status password saat ini -->
@@ -611,7 +614,9 @@ async function fetchConfig() {
 }
 
 async function checkAdminPassword() {
-  const pw = document.getElementById('adminPwInput').value;
+  const input = document.getElementById('adminPwInput');
+  if (input.disabled) return;
+  const pw = input.value;
   if (!pw) return;
   const h = await sha256(pw);
   if (h === _adminHash) {
@@ -630,11 +635,24 @@ document.getElementById('adminPwInput').addEventListener('keydown', e => {
 });
 
 (async function() {
+  const input = document.getElementById('adminPwInput');
+  const btn   = document.querySelector('#adminGate .gate-box button');
+  input.disabled    = true;
+  input.placeholder = 'Memuat…';
+  btn.disabled      = true;
+
   await fetchConfig();
+
   if (sessionStorage.getItem(ADMIN_SESSION_KEY) === '1') {
     document.getElementById('adminGate').style.display = 'none';
     initPage();
+    return;
   }
+
+  input.disabled    = false;
+  input.placeholder = 'Kata sandi admin';
+  btn.disabled      = false;
+  input.focus();
 })();
 
 // ══════════════════════════════════════════════
@@ -807,6 +825,11 @@ async function saveAdminPassword() {
   document.getElementById('btnSaveAdmin').disabled = true;
   initPage();
   showAdminAlert('alertAdminOk', null);
+}
+
+function logoutAdmin() {
+  sessionStorage.removeItem(ADMIN_SESSION_KEY);
+  location.reload();
 }
 
 async function resetAdminToDefault() {
