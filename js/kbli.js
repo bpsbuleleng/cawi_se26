@@ -126,6 +126,11 @@ function selectKBLI(d) {
   if (chip) {
     chip.classList.remove('hidden');
     document.getElementById('q9g_kbli_chip_text').textContent = `[${d.kode}] ${d.judul} — Kategori ${d.kategori}: ${getKategoriName(d.kategori)}`;
+    const uraianEl = document.getElementById('q9g_kbli_chip_uraian');
+    if (uraianEl) {
+      uraianEl.textContent = d.uraian;
+      uraianEl.classList.toggle('hidden', !d.uraian);
+    }
   }
   const isHotel = d.kategori === 'I' || (d.kode && d.kode.startsWith('55'));
   document.getElementById('q9i_hotel_wrap').classList.toggle('hidden', !isHotel);
@@ -138,7 +143,11 @@ function clearKBLI() {
   document.getElementById('q9g_kbli_kategori').value = '';
   document.getElementById('q9h_kategori').value = '';
   const chip = document.getElementById('q9g_kbli_chip');
-  if (chip) chip.classList.add('hidden');
+  if (chip) {
+    chip.classList.add('hidden');
+    const uraianEl = document.getElementById('q9g_kbli_chip_uraian');
+    if (uraianEl) { uraianEl.textContent = ''; uraianEl.classList.add('hidden'); }
+  }
   document.getElementById('q9i_hotel_wrap').classList.add('hidden');
   document.querySelectorAll('input[name="q9i"]').forEach(r => r.checked = false);
   updateProgress();
