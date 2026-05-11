@@ -387,7 +387,7 @@
     <button class="btn btn-outline" onclick="toggleShowPw()">👁</button>
   </div>
 
-  <div class="alert alert-ok"  id="alertOk">✅ Password berhasil diubah dan disimpan di perangkat ini.</div>
+  <div class="alert alert-ok"  id="alertOk">✅ Password berhasil diubah dan disimpan di Google Sheets.</div>
   <div class="alert alert-err" id="alertErr"></div>
 </div>
 
@@ -456,15 +456,15 @@
 <div class="card">
   <div class="card-title">ℹ️ Cara Kerja & Sinkronisasi</div>
   <div class="info-box">
-    <strong>Penyimpanan per perangkat</strong>
-    Password yang diubah disimpan di <em>localStorage</em> perangkat ini saja. Perangkat lain
-    (HP/laptop petugas lain) tetap menggunakan password lama sampai admin mengubahnya di
-    perangkat masing-masing.<br><br>
-    <strong>Cara distribusi password baru:</strong><br>
-    1. Ubah password di halaman ini (di perangkat admin).<br>
-    2. Sampaikan password baru kepada semua petugas.<br>
-    3. Masing-masing petugas masuk ke <code>…/admin.html</code> dan atur password yang sama.<br>
-    4. Atau: minta petugas logout (tutup tab/browser), lalu masukkan password baru di form login.
+    <strong>Penyimpanan terpusat di Google Sheets</strong>
+    Password disimpan sebagai hash SHA-256 di sheet <em>CAWI_Config</em> pada Google Sheets.
+    Semua perangkat membaca hash yang sama setiap kali membuka halaman, sehingga perubahan
+    password langsung berlaku di seluruh perangkat tanpa konfigurasi manual.<br><br>
+    <strong>Catatan penting:</strong><br>
+    • Jika koneksi ke Google Sheets gagal saat halaman dibuka, sistem otomatis jatuh ke
+    password default yang tertanam di kode.<br>
+    • Pastikan Google Apps Script sudah di-deploy ulang setelah perubahan kode backend agar
+    route <code>getConfig</code> / <code>setConfig</code> aktif.
   </div>
 </div>
 
