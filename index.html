@@ -14,26 +14,16 @@
 <body>
 
 <!-- ====== PASSWORD GATE ====== -->
-<div id="pwGate" style="position:fixed;inset:0;background:#1a2332;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px">
-  <div style="background:#fff;border-radius:12px;padding:36px 32px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4);text-align:center">
-    <div style="font-size:28px;font-weight:900;color:#fc6c00;letter-spacing:4px;margin-bottom:4px">CAWI</div>
-    <div style="font-size:11px;color:#aaa;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px">SE2026 — BPS Buleleng</div>
-    <div style="background:#fff5f5;border:1.5px solid #feb2b2;border-radius:7px;padding:10px 14px;font-size:12px;color:#c53030;margin-bottom:20px;font-weight:600;letter-spacing:.3px">
-      &#128274; AKSES TERBATAS — PETUGAS BPS
-    </div>
-    <input type="password" id="pwInput" placeholder="Masukkan kata sandi"
-      style="width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:7px;font-size:14px;font-family:inherit;margin-bottom:12px;outline:none;transition:border-color .2s"
-      onkeydown="if(event.key==='Enter')checkPassword()"
-      onfocus="this.style.borderColor='#fc6c00'" onblur="this.style.borderColor='#ddd'"/>
-    <div id="pwError" style="color:#c53030;font-size:12px;margin-bottom:10px;display:none;font-weight:600">&#10005; Kata sandi salah</div>
-    <button onclick="checkPassword()"
-      style="width:100%;background:#fc6c00;color:#fff;border:none;padding:12px;border-radius:7px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.3px;transition:background .2s"
-      onmouseover="this.style.background='#e06000'" onmouseout="this.style.background='#fc6c00'">
-      Masuk
-    </button>
-    <p style="font-size:11px;color:#ccc;margin-top:18px;line-height:1.7">
-      Hanya untuk petugas pencacah resmi<br/>Sensus Ekonomi 2026 BPS Buleleng
-    </p>
+<div id="pwGate">
+  <div class="pw-card">
+    <div class="pw-title">CAWI</div>
+    <div class="pw-subtitle">SE2026 — BPS Buleleng</div>
+    <div class="pw-restricted">&#128274; AKSES TERBATAS — PETUGAS BPS</div>
+    <input type="password" id="pwInput" class="pw-input" placeholder="Masukkan kata sandi"
+      onkeydown="if(event.key==='Enter')checkPassword()"/>
+    <div id="pwError">&#10005; Kata sandi salah</div>
+    <button class="pw-btn" onclick="checkPassword()">Masuk</button>
+    <p class="pw-note">Hanya untuk petugas pencacah resmi<br/>Sensus Ekonomi 2026 BPS Buleleng</p>
   </div>
 </div>
 
@@ -44,7 +34,7 @@
   <div class="mobile-topbar-actions">
     <button class="mobile-action-btn" onclick="togglePetunjuk()">? Petunjuk</button>
     <button class="mobile-action-btn" onclick="showRecap()">&#128269; Rekap</button>
-    <button class="mobile-action-btn" onclick="guardedNav(logoutKuesioner)" style="color:#c53030">&#128274; Keluar</button>
+    <button class="mobile-action-btn mobile-action-btn-danger" onclick="guardedNav(logoutKuesioner)">&#128274; Keluar</button>
   </div>
 </div>
 
@@ -147,7 +137,7 @@
     <div class="sidebar-progress-bar">
       <div class="sidebar-progress-fill" id="sidebarProgressFill" style="width:0%"></div>
     </div>
-    <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:5px" id="sidebarProgressDetail">Mulai mengisi form...</div>
+    <div class="sidebar-progress-detail" id="sidebarProgressDetail">Mulai mengisi form...</div>
   </div>
   <div class="sidebar-divider"></div>
   <div class="sidebar-actions">
@@ -163,18 +153,18 @@
     <button class="sidebar-btn" onclick="guardedNav('daftar.html', true)">
       <span class="sidebar-btn-icon">&#128196;</span> Daftar Entri
     </button>
-    <button class="sidebar-btn" onclick="guardedNav(logoutKuesioner)" style="color:#c53030">
+    <button class="sidebar-btn sidebar-btn-danger" onclick="guardedNav(logoutKuesioner)">
       <span class="sidebar-btn-icon">&#128274;</span> Keluar
     </button>
   </div>
-  <div style="padding:8px 16px 4px;margin-top:auto">
-    <div id="autosaveStatus" style="font-size:10px;color:#bbb;line-height:1.6;display:flex;align-items:center;gap:5px">
-      <span style="width:6px;height:6px;border-radius:50%;background:#ddd;display:inline-block;flex-shrink:0" id="autosaveDot"></span>
+  <div class="sidebar-autosave">
+    <div id="autosaveStatus" class="autosave-status">
+      <span class="autosave-dot" id="autosaveDot"></span>
       <span id="autosaveText">Belum tersimpan</span>
     </div>
   </div>
-  <div style="padding:4px 16px 14px">
-    <div style="font-size:10px;color:#ccc;line-height:1.8">BPS Republik Indonesia<br/>&#169; Sensus Ekonomi 2026</div>
+  <div class="sidebar-footer-note">
+    <div class="sidebar-copyright">BPS Republik Indonesia<br/>&#169; Sensus Ekonomi 2026</div>
   </div>
 </aside>
 
@@ -221,7 +211,7 @@
     <div class="blok-badge">BLOK I</div>
     <div>
       <div class="blok-title-text">Keterangan Tempat &amp; Usaha/Perusahaan</div>
-      <div class="blok-title-sub">Pertanyaan 1 s.d. 25 — Isi semua kolom bertanda <strong style="color:#ffe0c0">*</strong></div>
+      <div class="blok-title-sub">Pertanyaan 1 s.d. 25 — Isi semua kolom bertanda <strong class="req-light">*</strong></div>
     </div>
   </div>
 
@@ -329,7 +319,7 @@
           <div class="hint">Alamat website diawali dengan www.</div>
         </div>
       </div>
-      <div class="subsection-label" style="margin-top:8px">Nomor Telepon</div>
+      <div class="subsection-label subsection-label-spaced">Nomor Telepon</div>
       <div class="inline-fields">
         <div class="form-group">
           <label class="field-label">Kode Area</label>
@@ -655,13 +645,13 @@
         </div>
         <input type="hidden" id="q9g_kbli_kode"/>
         <input type="hidden" id="q9g_kbli_kategori"/>
-        <div id="q9g_kbli_chip" class="hidden" style="margin-top:8px;padding:10px 14px;background:#f0fff4;border:1.5px solid #68d391;border-radius:6px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div id="q9g_kbli_chip" class="kbli-chip hidden">
           <div>
-            <div style="font-size:10px;font-weight:800;color:#276749;letter-spacing:1px;text-transform:uppercase">KBLI Terpilih</div>
-            <div style="font-size:13px;font-weight:600;color:#1a4731;margin-top:2px" id="q9g_kbli_chip_text"></div>
-            <div style="font-size:12px;color:#2d6a4f;margin-top:6px;line-height:1.55" id="q9g_kbli_chip_uraian" class="hidden"></div>
+            <div class="kbli-chip-label">KBLI Terpilih</div>
+            <div class="kbli-chip-text" id="q9g_kbli_chip_text"></div>
+            <div class="kbli-chip-uraian hidden" id="q9g_kbli_chip_uraian"></div>
           </div>
-          <button type="button" onclick="clearKBLI()" style="background:none;border:1.5px solid #68d391;color:#276749;padding:4px 12px;border-radius:5px;cursor:pointer;font-size:11.5px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0">Ganti ✕</button>
+          <button type="button" class="kbli-chip-btn" onclick="clearKBLI()">Ganti ✕</button>
         </div>
       </div>
 
@@ -1056,9 +1046,9 @@
       </div>
       <div class="form-group">
         <label class="field-label">d. Persentase pendapatan dari usaha online <span class="req">*</span></label>
-        <div style="display:flex;align-items:center;gap:8px">
-          <input type="number" id="q23d" min="0" max="100" placeholder="0" style="width:120px"/>
-          <span style="color:#666">%</span>
+        <div class="inline-pct-row">
+          <input type="number" id="q23d" class="input-short" min="0" max="100" placeholder="0"/>
+          <span class="pct-label">%</span>
         </div>
       </div>
     </div>
@@ -1079,8 +1069,8 @@
       <div class="form-group">
         <label class="field-label">c. Nilai total aset pada 31 Desember 2025</label>
         <div class="currency-input-wrap"><span class="currency-prefix">Rp</span><input type="text" id="q24c" readonly class="total-field" placeholder="0,00"/></div>
-        <div style="margin-top:10px">
-          <label class="field-label" style="font-size:12px">c1. Jika tidak dapat mengisikan nilai nominal, pilih nilai total aset <span class="req">*</span></label>
+        <div class="subsection-label-spaced">
+          <label class="field-label field-label-sm">c1. Jika tidak dapat mengisikan nilai nominal, pilih nilai total aset <span class="req">*</span></label>
           <div class="radio-group">
             <label class="radio-item"><input type="radio" name="q24c1" value="1"/> <span>1. s.d. Rp 500 juta</span></label>
             <label class="radio-item"><input type="radio" name="q24c1" value="2"/> <span>2. Lebih dari Rp 500 juta s.d. Rp 1 miliar</span></label>
@@ -1131,12 +1121,12 @@
       </div>
       <div class="form-group">
         <label class="field-label">g. Total (a+b+c+d+e+f) — harus = 100%</label>
-        <div style="display:flex;align-items:center;gap:8px">
-          <input type="number" id="q25g" readonly class="total-field" placeholder="0" style="width:120px"/>
-          <span id="modal-indicator" style="font-size:13px;color:#666">%</span>
+        <div class="inline-pct-row">
+          <input type="number" id="q25g" readonly class="total-field input-short" placeholder="0"/>
+          <span id="modal-indicator">%</span>
         </div>
       </div>
-      <div class="hint" style="margin-top:4px">Keterangan: LNPRT = Lembaga Nonprofit yang Melayani Rumah Tangga</div>
+      <div class="hint">Keterangan: LNPRT = Lembaga Nonprofit yang Melayani Rumah Tangga</div>
     </div>
   </div>
 
@@ -1164,13 +1154,12 @@
     <div class="section-body">
       <div class="form-group">
         <label class="field-label">Koordinat GPS <span class="req">*</span></label>
-        <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+        <div class="lokasi-row">
           <button type="button" id="lokasiBtn" onclick="ambilLokasi()"
-            style="display:flex;align-items:center;gap:8px;padding:10px 20px;background:#fc6c00;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:background .2s"
             onmouseover="this.style.background='#e06000'" onmouseout="this.style.background=this.dataset.done==='1'?'#276749':'#fc6c00'">
             &#128205; Ambil Lokasi GPS
           </button>
-          <div id="lokasiResult" style="flex:1;min-width:200px;background:#f7f4f0;border:1.5px solid #e8e3de;border-radius:7px;padding:10px 14px;font-size:12.5px;color:#888;line-height:1.7">
+          <div id="lokasiResult" class="lokasi-result">
             Belum mengambil lokasi — tekan tombol untuk mulai.
           </div>
         </div>
@@ -1178,8 +1167,8 @@
         <input type="hidden" id="lokasi_lng"/>
         <input type="hidden" id="lokasi_akurasi"/>
         <div class="hint">Digunakan untuk verifikasi kunjungan lapangan. Pastikan GPS aktif di perangkat.</div>
-        <div id="lokasiMapWrap" style="display:none;margin-top:14px;border-radius:10px;overflow:hidden;border:1.5px solid #68d391;box-shadow:0 2px 10px rgba(0,0,0,.1)">
-          <div id="lokasiMap" style="height:240px;width:100%"></div>
+        <div id="lokasiMapWrap" class="lokasi-map-wrap" style="display:none">
+          <div id="lokasiMap" class="lokasi-map"></div>
         </div>
       </div>
     </div>
@@ -1261,7 +1250,7 @@
       <div class="inline-fields">
         <div class="form-group">
           <label class="field-label">NIP / ID Petugas</label>
-          <input type="text" id="p_nip" placeholder="Terisi otomatis saat nama dipilih" readonly style="background:#f8f8f8;color:#555"/>
+          <input type="text" id="p_nip" class="input-muted" placeholder="Terisi otomatis saat nama dipilih" readonly/>
         </div>
         <div class="form-group">
           <label class="field-label">No. HP Petugas</label>
@@ -1295,17 +1284,17 @@
       <div class="form-group">
         <label class="field-label">Tanda Tangan <span class="req">*</span></label>
         <div class="sig-wrap">
-          <canvas id="sigCanvas" width="860" height="180" style="max-width:100%"></canvas>
+          <canvas id="sigCanvas" width="860" height="180"></canvas>
         </div>
         <div class="sig-actions">
           <button type="button" class="btn btn-sm btn-danger" onclick="clearSignature()">Hapus Tanda Tangan</button>
-          <span id="sig-hint" style="font-size:12px;color:#888;line-height:2">Gambar tanda tangan di kotak di atas</span>
+          <span id="sig-hint" class="sig-hint">Gambar tanda tangan di kotak di atas</span>
         </div>
       </div>
 
-      <div id="submitAlert" class="alert alert-error hidden" style="margin-top:14px"></div>
+      <div id="submitAlert" class="alert alert-error hidden submit-alert"></div>
 
-      <div style="margin-top:20px">
+      <div class="submit-section">
         <div class="submit-actions">
           <button id="saveDraftBtn" type="button" class="btn-draft-inline" onclick="saveAsDraft()">&#128190; Simpan Draft</button>
           <button class="btn btn-primary btn-submit-compact" id="submitBtn" onclick="showRecap()">&#128228; KIRIM / SUBMIT</button>
@@ -1325,14 +1314,14 @@
 
 </div><!-- end form-container -->
 
-<!-- FOOTER -->
-<div style="background:#fff;border-top:3px solid #fc6c00;margin-top:20px;padding:16px 20px;text-align:center">
-  <div style="max-width:960px;margin:0 auto;font-size:12px;color:#aaa;line-height:1.8">
-    <strong style="color:#fc6c00">SENSUS EKONOMI 2026 — CAWI</strong><br/>
+<!-- ====== FOOTER ====== -->
+<footer class="form-footer">
+  <div class="footer-inner">
+    <strong class="footer-brand">SENSUS EKONOMI 2026 — CAWI</strong><br/>
     Badan Pusat Statistik Republik Indonesia &nbsp;|&nbsp; Sosialisasi SE2026<br/>
-    <span style="font-size:11px">Data yang dikumpulkan bersifat <strong>RAHASIA</strong> dan dilindungi oleh Undang-Undang No. 16 Tahun 1997 tentang Statistik</span>
+    <span class="footer-note">Data yang dikumpulkan bersifat <strong>RAHASIA</strong> dan dilindungi oleh Undang-Undang No. 16 Tahun 1997 tentang Statistik</span>
   </div>
-</div>
+</footer>
 
 </div><!-- end main-content -->
 </div><!-- end app-layout -->
@@ -1352,7 +1341,7 @@
     <div class="petunjuk-section">
       <h3>Cara Pengisian</h3>
       <ul>
-        <li>Isi semua kolom bertanda <strong style="color:#d63031">*</strong> (wajib diisi)</li>
+        <li>Isi semua kolom bertanda <strong class="req">*</strong> (wajib diisi)</li>
         <li>Gunakan navigasi di sidebar kiri untuk berpindah antar blok</li>
         <li>Klik <strong>Rekap &amp; Periksa</strong> sebelum submit untuk memeriksa isian</li>
         <li>Pastikan semua data benar dan dapat dipertanggungjawabkan</li>
@@ -1420,22 +1409,21 @@
   </div>
 </div>
 
-<!-- RESTORE BANNER -->
-<div id="restoreBanner" style="display:none;position:fixed;bottom:0;left:240px;right:0;background:#1a2332;color:#fff;padding:12px 20px;z-index:350;box-shadow:0 -3px 16px rgba(0,0,0,.3);border-top:2px solid #fc6c00">
-  <div style="max-width:700px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-    <span style="font-size:13px;flex:1;min-width:200px">&#128190; <strong>Draft tersimpan ditemukan</strong> — lanjutkan isian sebelumnya?</span>
-    <span id="restoreBannerTs" style="font-size:11px;color:rgba(255,255,255,.45)"></span>
-    <button onclick="restoreDraft()" style="background:#fc6c00;color:#fff;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit">&#128257; Muat Draft</button>
-    <button onclick="dismissRestore()" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit">Mulai Baru</button>
+<!-- ====== RESTORE BANNER ====== -->
+<div id="restoreBanner" class="restore-banner" style="display:none">
+  <div class="banner-inner">
+    <span class="banner-msg">&#128190; <strong>Draft tersimpan ditemukan</strong> — lanjutkan isian sebelumnya?</span>
+    <span id="restoreBannerTs" class="banner-ts"></span>
+    <button onclick="restoreDraft()" class="banner-btn banner-btn-primary">&#128257; Muat Draft</button>
+    <button onclick="dismissRestore()" class="banner-btn banner-btn-secondary">Mulai Baru</button>
   </div>
 </div>
-<style>@media(max-width:767px){#restoreBanner{left:0}#editModeBanner{left:0}}</style>
 
-<!-- EDIT MODE BANNER -->
-<div id="editModeBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#276749;color:#fff;padding:11px 20px;z-index:360;box-shadow:0 -3px 16px rgba(0,0,0,.3);border-top:2px solid #68d391">
-  <div style="max-width:700px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-    <span style="font-size:13px;flex:1;min-width:200px">&#9998; <strong>Mode Edit</strong> — periksa dan ubah data, lalu kirim. Pengiriman akan <strong>menimpa rekaman asli</strong>.</span>
-    <button onclick="cancelEditMode()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit">&#10005; Batal</button>
+<!-- ====== EDIT MODE BANNER ====== -->
+<div id="editModeBanner" class="edit-mode-banner" style="display:none">
+  <div class="banner-inner">
+    <span class="banner-msg">&#9998; <strong>Mode Edit</strong> — periksa dan ubah data, lalu kirim. Pengiriman akan <strong>menimpa rekaman asli</strong>.</span>
+    <button onclick="cancelEditMode()" class="banner-btn banner-btn-outline">&#10005; Batal</button>
   </div>
 </div>
 <!-- LEAVE GUARD MODAL -->

@@ -4,6 +4,32 @@ Aplikasi web formulir pendataan **Sensus Ekonomi 2026** berbasis CAWI (Computer 
 
 ---
 
+## Changelog
+
+### v1.4 — HTML Structure Cleanup
+- Seluruh `style="..."` inline dipindah ke class CSS (`index.css`) — tidak ada perubahan JS
+- Password gate, notification banners, sidebar, footer kini sepenuhnya dikendalikan oleh CSS class
+- Tag `<style>` inline di akhir body dihapus, digabung ke `index.css`
+- Elemen `<footer>` semantik menggantikan `<div>` untuk bagian bawah formulir
+
+### v1.3 — Sidebar Navigation & Block Outlines
+- Tombol BLOK I / II / III di sidebar dapat di-expand untuk menampilkan daftar semua pertanyaan
+- Klik pertanyaan di sidebar langsung scroll ke bagian tersebut dengan highlight kuning
+- Semua section card Q1–Q25, Lokasi, Catatan, Petugas, Responden diberi `id="sec-*"` sebagai anchor
+- Tombol **Simpan Draft** dipindah ke posisi paling atas daftar aksi sidebar
+- Pindah blok otomatis menyimpan draft (bukan hanya saat ada draft yang sudah dibuat sebelumnya)
+
+### v1.2 — Daftar Entri UI
+- Badge `DRAFT` dihapus dari baris draft (tab label sudah cukup)
+- Tombol aksi per baris disederhanakan menjadi icon-only dengan tooltip `title`
+
+### v1.1 — Format Mata Uang
+- Field nominal uang (Q22–Q24) kini menggunakan format Indonesia dengan 2 desimal: `1.234.567,89`
+- Placeholder berubah dari `0` menjadi `0,00`
+- `parseCurrency` dan `formatCurrency` diperbarui untuk menangani desimal koma
+
+---
+
 ## Struktur Proyek
 
 ```
