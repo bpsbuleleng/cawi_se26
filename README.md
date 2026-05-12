@@ -175,12 +175,16 @@ Upload seluruh folder proyek (termasuk `js/`, `css/`, `master/`) ke server web m
 
 ## Password Default
 
-| Akses | Password Default |
-|---|---|
-| Formulir (kuesioner) | Tanyakan ke pengelola proyek asal |
-| Panel Admin | Tanyakan ke pengelola proyek asal |
+Password aktif diambil dari Google Sheets. Jika sheet belum dikonfigurasi (misal saat awal duplikasi), aplikasi jatuh ke password fallback berikut:
 
-> Password disimpan sebagai hash SHA-256 di Google Sheets dan diambil saat halaman dimuat. Ubah password melalui `admin.html` segera setelah duplikasi selesai — perubahan langsung berlaku untuk semua perangkat.
+| Akses | Password Fallback (Duplikat Baru) |
+|---|---|
+| Formulir (kuesioner) | `Kuesioner08!` |
+| Panel Admin | `Admin08!` |
+
+> **Segera ganti password** setelah duplikasi selesai melalui `admin.html` → kartu *Ubah Password*. Perubahan disimpan ke Google Sheets dan langsung berlaku untuk semua perangkat.
+
+> Password deployment **asli** tidak tercantum di sini — tanyakan ke pengelola proyek asal BPS Buleleng.
 
 ---
 
