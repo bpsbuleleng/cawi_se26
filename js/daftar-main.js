@@ -177,7 +177,7 @@ function renderTable() {
       html += `<tr class="tr-draft">
         <td data-label="No" style="color:#aaa;font-size:12px;text-align:center">${idx+1}</td>
         <td data-label="Perusahaan" class="cell-company">
-          ${co}<span class="badge-draft">DRAFT</span>${koml}
+          ${co}${koml}
         </td>
         <td data-label="Petugas" class="cell-petugas">${esc(r.petugas_nama||'—')}</td>
         <td data-label="Kecamatan" style="font-size:12.5px;color:#555">${kec}</td>
