@@ -6,6 +6,12 @@ Aplikasi web formulir pendataan **Sensus Ekonomi 2026** berbasis CAWI (Computer 
 
 ## Changelog
 
+### v1.5 — Master Data Centralization
+- `master/wilayah.json` — kecamatan, kelurahan, dan provinsi (sebelumnya tersebar di `data.js`)
+- `master/pegawai.json` — daftar pegawai (sebelumnya duplikat di `petugas.js` dan `admin-main.js`)
+- `regional.js` memuat wilayah via `preloadWilayah()` saat init; `petugas.js` & `admin-main.js` fetch dari JSON
+- `data.js` kini hanya menyimpan `KBLI_DATA` sebagai fallback offline untuk `kbli.js`
+
 ### v1.4 — HTML Structure Cleanup
 - Seluruh `style="..."` inline dipindah ke class CSS (`index.css`) — tidak ada perubahan JS
 - Password gate, notification banners, sidebar, footer kini sepenuhnya dikendalikan oleh CSS class
@@ -37,12 +43,14 @@ cawi_se26/
 ├── index.html              # Formulir isian utama (petugas)
 ├── daftar.html             # Dashboard rekap entri data
 ├── admin.html              # Panel admin (password, sheet, pegawai)
-├── data.js                 # Data statis kecamatan & kelurahan
+├── data.js                 # Fallback offline KBLI 2025 (kecamatan/pegawai kini di master/)
 ├── google-apps-script.js   # Kode backend Google Apps Script
 ├── netlify.toml            # Konfigurasi deployment Netlify
 │
 ├── master/
-│   └── kbli.json           # Kamus KBLI 2025 (1520 entri: kode, judul, uraian)
+│   ├── kbli.json           # Kamus KBLI 2025 (1520 entri: kode, judul, uraian)
+│   ├── wilayah.json        # Data kecamatan, kelurahan, dan provinsi
+│   └── pegawai.json        # Daftar pegawai BPS Buleleng
 │
 ├── css/
 │   ├── index.css           # Styling formulir utama

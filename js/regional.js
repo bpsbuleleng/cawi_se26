@@ -1,5 +1,19 @@
 const API_BASE = 'https://esurvey.bps.go.id/lookup/api/v1/collections';
 
+let STATIC_KECAMATAN = {};
+let STATIC_KELURAHAN = {};
+let STATIC_PROVINSI  = [];
+
+async function preloadWilayah() {
+  try {
+    const res  = await fetch('master/wilayah.json');
+    const json = await res.json();
+    if (json.kecamatan) STATIC_KECAMATAN = json.kecamatan;
+    if (json.kelurahan) STATIC_KELURAHAN = json.kelurahan;
+    if (json.provinsi)  STATIC_PROVINSI  = json.provinsi;
+  } catch(e) { /* pakai nilai kosong, dropdown wilayah tidak akan terisi */ }
+}
+
 async function apiFetch(url) {
   const r = await fetch(url, {headers:{'Accept':'application/json'}});
   if (!r.ok) throw new Error('API error: ' + r.status);
@@ -10,7 +24,7 @@ function loadProvinsi() {
   const sel = document.getElementById('q11e_provinsi');
   if (!sel) return;
   sel.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
-  const list = (typeof STATIC_PROVINSI !== 'undefined') ? STATIC_PROVINSI : [];
+  const list = STATIC_PROVINSI || [];
   list.forEach(d => {
     const o = document.createElement('option');
     o.value = d.kode;
@@ -58,7 +72,7 @@ function loadKecamatan(kdprovkab) {
   syncSearchable('q3_kecamatan', 'kecamatan');
   syncSearchable('q4_kelurahan', 'kelurahan/desa');
   if (!kdprovkab) return;
-  const list = (typeof STATIC_KECAMATAN !== 'undefined' && STATIC_KECAMATAN[kdprovkab]) || [];
+  const list = (STATIC_KECAMATAN && STATIC_KECAMATAN[kdprovkab]) || [];
   list.forEach(d => {
     const o = document.createElement('option');
     o.value = d.kode;
@@ -75,7 +89,7 @@ function loadKelurahan(kdprovkabkec) {
   sel.disabled = true;
   syncSearchable('q4_kelurahan', 'kelurahan/desa');
   if (!kdprovkabkec) return;
-  const list = (typeof STATIC_KELURAHAN !== 'undefined' && STATIC_KELURAHAN[kdprovkabkec]) || [];
+  const list = (STATIC_KELURAHAN && STATIC_KELURAHAN[kdprovkabkec]) || [];
   list.slice().sort((a,b) => a.nama.localeCompare(b.nama)).forEach(d => {
     const o = document.createElement('option');
     o.value = d.kode;

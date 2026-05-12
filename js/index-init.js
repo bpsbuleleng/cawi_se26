@@ -1,6 +1,6 @@
 let _formDirty = false;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Init searchable selects BEFORE any data load
   makeSearchable('q1_provinsi', 'provinsi');
   makeSearchable('q2_kabupaten', 'kabupaten/kota');
@@ -19,14 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (inpProv) { inpProv.value = 'BALI'; inpProv.classList.add('has-value'); }
   if (inpKab)  { inpKab.value  = 'KAB. BULELENG'; inpKab.classList.add('has-value'); }
 
+  // Load wilayah dari master/wilayah.json sebelum populate dropdown
+  await preloadWilayah();
+
   // Auto-load kecamatan list for Buleleng on open
   loadKecamatan('5108');
 
   // Load provinsi for Kantor Pusat (Q11e)
   loadProvinsi();
 
-  // Preload KBLI data for instant local search
+  // Preload KBLI dan pegawai di background
   preloadKBLI();
+  preloadPegawai();
 
   // Default today's date for Blok III
   document.getElementById('r_tanggal').value = new Date().toISOString().split('T')[0];
