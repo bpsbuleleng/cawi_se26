@@ -91,9 +91,24 @@ document.addEventListener('DOMContentLoaded', () => {
   // === EDIT MODE (dari daftar.html) ===
   const _isEditMode = loadEditMode();
 
+  // Sembunyikan tombol Simpan Draft saat edit mode
+  if (_isEditMode) {
+    const btn = document.getElementById('saveDraftBtn');
+    if (btn) btn.style.display = 'none';
+  }
+
+  // === DRAFT CONTINUE (dari daftar.html klik "Lanjutkan") ===
+  const _draftContinueId = localStorage.getItem('cawi_draft_continue_id');
+  if (_draftContinueId && !_isEditMode) {
+    localStorage.removeItem('cawi_draft_continue_id');
+    _currentDraftId = _draftContinueId;
+    // LS_KEY sudah diset oleh continueDraft() di daftar-main.js
+    restoreDraft();
+  }
+
   // === AUTO-SAVE SETUP ===
-  // Check for existing draft (skip jika sedang edit mode)
-  if (!_isEditMode) try {
+  // Check for existing draft (skip jika edit mode atau sudah di-continue)
+  if (!_isEditMode && !_draftContinueId) try {
     const raw = localStorage.getItem(LS_KEY);
     if (raw) {
       const vals = JSON.parse(raw);

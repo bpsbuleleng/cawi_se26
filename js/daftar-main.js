@@ -1,5 +1,11 @@
 let records = [];
 
+/* ====== LOCAL DRAFTS (tanpa load draft.js) ====== */
+function getLocalDrafts() {
+  try { return JSON.parse(localStorage.getItem('cawi_se2026_drafts_v1') || '[]'); }
+  catch(e) { return []; }
+}
+
 /* ====== FETCH DATA ====== */
 async function fetchRecords() {
   setLoading(true);
@@ -10,7 +16,9 @@ async function fetchRecords() {
     });
     const json = await resp.json();
     if (json.status === 'ok') {
-      records = json.data || [];
+      const serverRecs = (json.data || []).map(r => ({ ...r, _isDraft: false }));
+      const draftRecs  = getLocalDrafts();
+      records = [...draftRecs, ...serverRecs];
       buildPetugasFilter();
       updateStats();
       renderTable();
@@ -49,9 +57,13 @@ function buildPetugasFilter() {
 }
 
 function getFiltered() {
-  const q = (document.getElementById('searchBox').value || '').toLowerCase().trim();
-  const p = document.getElementById('filterPetugas').value;
+  const q      = (document.getElementById('searchBox').value || '').toLowerCase().trim();
+  const p      = document.getElementById('filterPetugas').value;
+  const status = document.getElementById('filterStatus').value;
   return records.filter(r => {
+    const okStatus  = !status
+      || (status === 'draft'     &&  r._isDraft)
+      || (status === 'submitted' && !r._isDraft);
     const okPetugas = !p || r.petugas_nama === p;
     const okSearch  = !q
       || (r.nama_perusahaan || '').toLowerCase().includes(q)
@@ -61,7 +73,7 @@ function getFiltered() {
       || (r.kelurahan       || '').toLowerCase().includes(q)
       || (r.kbli_judul      || '').toLowerCase().includes(q)
       || (r.kbli_kode       || '').toLowerCase().includes(q);
-    return okPetugas && okSearch;
+    return okStatus && okPetugas && okSearch;
   });
 }
 
@@ -72,8 +84,11 @@ function onFilter() {
 
 /* ====== STATS ====== */
 function updateStats() {
-  const filtered = getFiltered();
-  document.getElementById('statTotal').textContent    = records.length;
+  const filtered   = getFiltered();
+  const serverRecs = records.filter(r => !r._isDraft);
+  const draftRecs  = records.filter(r =>  r._isDraft);
+  document.getElementById('statTotal').textContent    = serverRecs.length;
+  document.getElementById('statDraft').textContent    = draftRecs.length;
   document.getElementById('statFiltered').textContent = filtered.length;
   const uniq = new Set(records.map(r => r.petugas_nama).filter(Boolean));
   document.getElementById('statPetugas').textContent  = uniq.size;
@@ -81,17 +96,19 @@ function updateStats() {
 
 /* ====== RENDER TABLE ====== */
 function renderTable() {
-  const filtered = getFiltered();
-  const container = document.getElementById('tableContainer');
+  const filtered   = getFiltered();
+  const container  = document.getElementById('tableContainer');
+  const totalServer = records.filter(r => !r._isDraft).length;
+  const totalDraft  = records.filter(r =>  r._isDraft).length;
 
   document.getElementById('listMeta').textContent = records.length
-    ? `${filtered.length} dari ${records.length} entri`
+    ? `${filtered.length} ditampilkan — ${totalServer} tersubmit, ${totalDraft} draft`
     : 'Belum ada data';
 
   if (!records.length) {
     container.innerHTML = `<div class="empty-state">
       <div class="empty-icon">&#128196;</div>
-      <div class="empty-text">Belum ada entri tersimpan di Google Sheets.<br/>Submit form untuk merekam entri.</div>
+      <div class="empty-text">Belum ada entri tersimpan.<br/>Submit form atau simpan draft dari halaman kuesioner.</div>
       <a href="index.html" class="btn btn-primary">&#43; Mulai Entri Baru</a>
     </div>`;
     return;
@@ -109,27 +126,47 @@ function renderTable() {
     <th>Perusahaan / Usaha</th>
     <th>Petugas Pendata</th>
     <th>Kecamatan</th>
-    <th>Waktu Submit</th>
+    <th>Waktu</th>
     <th>Aksi</th>
   </tr></thead><tbody>`;
 
   filtered.forEach((r, idx) => {
     const co   = esc(r.nama_perusahaan) || '<em style="color:#bbb">Tanpa nama</em>';
     const koml = r.nama_komersial ? `<small>${esc(r.nama_komersial)}</small>` : '';
-    html += `<tr>
-      <td data-label="No" style="color:#aaa;font-size:12px;text-align:center">${idx+1}</td>
-      <td data-label="Perusahaan" class="cell-company">${co}${koml}</td>
-      <td data-label="Petugas" class="cell-petugas">${esc(r.petugas_nama||'—')}
-        ${r.petugas_nip ? `<small>NIP: ${esc(r.petugas_nip)}</small>` : ''}</td>
-      <td data-label="Kecamatan" style="font-size:12.5px;color:#555">${esc(r.kecamatan||'—')}</td>
-      <td data-label="Waktu" style="font-size:12px;color:#888;white-space:nowrap">${fmtDate(r._ts||r.timestamp)}</td>
-      <td><div class="td-actions">
-        <button class="btn btn-sm btn-info" onclick="viewRecord(${r._id})">&#128065; Lihat</button>
-        <button class="btn btn-sm" style="background:#38a169;color:#fff" onclick="editRecord(${r._id})">&#9998; Edit</button>
-        <button class="btn btn-sm" style="background:#805ad5;color:#fff" onclick="duplicateRecord(${r._id})">&#9986; Duplikat</button>
-        <button class="btn btn-sm" style="background:#e53e3e;color:#fff" onclick="deleteRecord(${r._id})">&#128465; Hapus</button>
-      </div></td>
-    </tr>`;
+
+    if (r._isDraft) {
+      const kec = esc(r.kecamatan || r.kecamatan_kd || '—');
+      html += `<tr class="tr-draft">
+        <td data-label="No" style="color:#aaa;font-size:12px;text-align:center">${idx+1}</td>
+        <td data-label="Perusahaan" class="cell-company">
+          ${co}<span class="badge-draft">DRAFT</span>${koml}
+        </td>
+        <td data-label="Petugas" class="cell-petugas">${esc(r.petugas_nama||'—')}</td>
+        <td data-label="Kecamatan" style="font-size:12.5px;color:#555">${kec}</td>
+        <td data-label="Waktu" style="font-size:12px;color:#888;white-space:nowrap">${fmtDate(r._ts)}</td>
+        <td><div class="td-actions">
+          <button class="btn btn-sm btn-draft-continue" onclick="continueDraft('${r._draftId}')">&#9654; Lanjutkan</button>
+          <button class="btn btn-sm btn-danger-sm" onclick="deleteDraftLocal('${r._draftId}')">&#128465; Hapus</button>
+        </div></td>
+      </tr>`;
+    } else {
+      html += `<tr>
+        <td data-label="No" style="color:#aaa;font-size:12px;text-align:center">${idx+1}</td>
+        <td data-label="Perusahaan" class="cell-company">
+          ${co}<span class="badge-submitted">TERSUBMIT</span>${koml}
+        </td>
+        <td data-label="Petugas" class="cell-petugas">${esc(r.petugas_nama||'—')}
+          ${r.petugas_nip ? `<small>NIP: ${esc(r.petugas_nip)}</small>` : ''}</td>
+        <td data-label="Kecamatan" style="font-size:12.5px;color:#555">${esc(r.kecamatan||'—')}</td>
+        <td data-label="Waktu" style="font-size:12px;color:#888;white-space:nowrap">${fmtDate(r._ts||r.timestamp)}</td>
+        <td><div class="td-actions">
+          <button class="btn btn-sm btn-info" onclick="viewRecord(${r._id})">&#128065; Lihat</button>
+          <button class="btn btn-sm" style="background:#38a169;color:#fff" onclick="editRecord(${r._id})">&#9998; Edit</button>
+          <button class="btn btn-sm" style="background:#805ad5;color:#fff" onclick="duplicateRecord(${r._id})">&#9986; Duplikat</button>
+          <button class="btn btn-sm" style="background:#e53e3e;color:#fff" onclick="deleteRecord(${r._id})">&#128465; Hapus</button>
+        </div></td>
+      </tr>`;
+    }
   });
   html += `</tbody></table>`;
   container.innerHTML = html;
@@ -231,15 +268,15 @@ function duplicateRecord(id) {
   if (!r) return;
   const copy = Object.assign({}, r);
   delete copy._id;
-  copy.responden_nama = '';
-  copy.responden_hp   = '';
-  copy.responden_email = '';
-  copy.tanggal_pelaksanaan = '';
+  copy.responden_nama        = '';
+  copy.responden_hp          = '';
+  copy.responden_email       = '';
+  copy.tanggal_pelaksanaan   = '';
   localStorage.setItem('cawi_edit_mode', JSON.stringify(copy));
   window.location.href = 'index.html';
 }
 
-/* ====== HAPUS ====== */
+/* ====== HAPUS (server record) ====== */
 let _pendingDeleteId = null;
 
 function deleteRecord(id) {
@@ -260,18 +297,16 @@ function cancelDelete() {
 
 async function confirmDelete() {
   if (!_pendingDeleteId) return;
-  const id = _pendingDeleteId;
+  const id  = _pendingDeleteId;
   const btn = document.getElementById('confirmDeleteBtn');
   btn.textContent = 'Menghapus...';
-  btn.disabled = true;
-
+  btn.disabled    = true;
   try {
     await fetch(getScriptUrl(), {
       method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({ action: 'deleteRecord', _delete_id: id })
+      mode:   'no-cors',
+      body:   JSON.stringify({ action: 'deleteRecord', _delete_id: id })
     });
-    // no-cors → opaque, asumsikan berhasil
     records = records.filter(x => x._id !== id);
     buildPetugasFilter();
     updateStats();
@@ -280,14 +315,39 @@ async function confirmDelete() {
   } catch(err) {
     alert('Gagal menghapus: ' + err.message);
     btn.textContent = 'Hapus';
-    btn.disabled = false;
+    btn.disabled    = false;
   }
+}
+
+/* ====== DRAFT: LANJUTKAN & HAPUS ====== */
+function continueDraft(id) {
+  const draft = getLocalDrafts().find(d => d._draftId === id);
+  if (!draft || !draft._raw) {
+    alert('Data draft tidak ditemukan atau telah rusak.');
+    return;
+  }
+  localStorage.setItem('cawi_se2026_draft_v1', JSON.stringify(draft._raw));
+  localStorage.setItem('cawi_draft_continue_id', id);
+  window.location.href = 'index.html';
+}
+
+function deleteDraftLocal(id) {
+  const draft = getLocalDrafts().find(d => d._draftId === id);
+  const name  = draft ? (draft.nama_perusahaan || 'draft ini') : 'draft ini';
+  if (!confirm(`Hapus draft "${name}"?\nData ini hanya tersimpan di perangkat ini dan tidak dapat dipulihkan.`)) return;
+  try {
+    const list = getLocalDrafts().filter(d => d._draftId !== id);
+    localStorage.setItem('cawi_se2026_drafts_v1', JSON.stringify(list));
+    records = records.filter(r => r._draftId !== id);
+    updateStats();
+    renderTable();
+  } catch(e) { alert('Gagal menghapus draft: ' + e.message); }
 }
 
 /* ====== EXPORT CSV ====== */
 function exportCSV() {
-  const filtered = getFiltered();
-  if (!filtered.length) { alert('Tidak ada data untuk diekspor.'); return; }
+  const filtered = getFiltered().filter(r => !r._isDraft);
+  if (!filtered.length) { alert('Tidak ada data tersubmit untuk diekspor.'); return; }
   const cols = ['timestamp','nama_perusahaan','nama_komersial',
     'provinsi','kabupaten','kecamatan','kelurahan',
     'petugas_nama','petugas_nip','petugas_hp',
@@ -303,7 +363,7 @@ function exportCSV() {
   const escape = v => `"${String(v || '').replace(/"/g,'""')}"`;
   const rows   = [headers.map(escape).join(',')];
   filtered.forEach(r => rows.push(cols.map(c => escape(r[c] || '')).join(',')));
-  const blob = new Blob(['﻿' + rows.join('\r\n')], {type:'text/csv;charset=utf-8'});
+  const blob = new Blob(['﻿' + rows.join('\r\n')], { type: 'text/csv;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;

@@ -32,6 +32,7 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:#f0ede8;color:#2d
 .stat-card{background:#fff;border-radius:8px;padding:12px 16px;flex:1;min-width:100px;box-shadow:0 2px 6px rgba(0,0,0,.07);border-left:4px solid #fc6c00}
 .stat-card.s2{border-left-color:#38a169}
 .stat-card.s3{border-left-color:#3182ce}
+.stat-card.s-draft{border-left-color:#dd6b20}
 .stat-num{font-size:22px;font-weight:900;color:#1a1a1a}
 .stat-label{font-size:10.5px;color:#888;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
 /* ====== TABLE WRAP ====== */
@@ -47,7 +48,16 @@ tr:hover td{background:#fffaf7}
 .cell-company small{display:block;font-weight:400;color:#888;font-size:11px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
 .cell-petugas{color:#444}
 .cell-petugas small{display:block;font-size:11px;color:#aaa;margin-top:1px}
-.td-actions{white-space:nowrap;display:flex;gap:6px;align-items:center}
+.td-actions{white-space:nowrap;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+/* ====== BADGES ====== */
+.badge-draft{display:inline-block;background:#dd6b20;color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:.8px;text-transform:uppercase;vertical-align:middle;margin-left:6px;white-space:nowrap}
+.badge-submitted{display:inline-block;background:#38a169;color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:.8px;text-transform:uppercase;vertical-align:middle;margin-left:6px;white-space:nowrap}
+/* ====== DRAFT ROW ====== */
+tr.tr-draft td{background:#fffaf0}
+tr.tr-draft:hover td{background:#fef3c7}
+.btn-draft-continue{background:#dd6b20;color:#fff}
+.btn-draft-continue:hover{background:#c05621}
+.btn-danger-sm{background:#e53e3e;color:#fff}
 .empty-state{text-align:center;padding:50px 20px;color:#aaa}
 .empty-icon{font-size:44px;margin-bottom:10px}
 .empty-text{font-size:14px;line-height:1.8;margin-bottom:16px}
