@@ -130,10 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('input', () => { scheduleAutosave(); _formDirty = true; });
   document.addEventListener('change', () => { scheduleAutosave(); _formDirty = true; });
 
-  // Save on blok navigation — update named draft if one already exists
+  // Save on blok navigation — auto-save draft (create if needed)
   const origGoBlok = window.goBlok;
   window.goBlok = function(n) {
-    if (_currentDraftId) saveAsDraft(); else saveDraft();
+    saveAsDraft();
     origGoBlok(n);
   };
 

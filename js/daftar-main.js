@@ -183,8 +183,8 @@ function renderTable() {
         <td data-label="Kecamatan" style="font-size:12.5px;color:#555">${kec}</td>
         <td data-label="Waktu" style="font-size:12px;color:#888;white-space:nowrap">${fmtDate(r._ts)}</td>
         <td><div class="td-actions">
-          <button class="btn btn-sm btn-draft-continue" onclick="continueDraft('${r._draftId}')">&#9654; Lanjutkan</button>
-          <button class="btn btn-sm btn-danger-sm" onclick="deleteDraftLocal('${r._draftId}')">&#128465; Hapus</button>
+          <button class="btn btn-sm btn-draft-continue" title="Lanjutkan" onclick="continueDraft('${r._draftId}')">&#9654;</button>
+          <button class="btn btn-sm btn-danger-sm" title="Hapus" onclick="deleteDraftLocal('${r._draftId}')">&#128465;</button>
         </div></td>
       </tr>`;
     } else {
@@ -198,10 +198,10 @@ function renderTable() {
         <td data-label="Kecamatan" style="font-size:12.5px;color:#555">${esc(r.kecamatan||'—')}</td>
         <td data-label="Waktu" style="font-size:12px;color:#888;white-space:nowrap">${fmtDate(r._ts||r.timestamp)}</td>
         <td><div class="td-actions">
-          <button class="btn btn-sm btn-info" onclick="viewRecord(${r._id})">&#128065; Lihat</button>
-          <button class="btn btn-sm" style="background:#38a169;color:#fff" onclick="editRecord(${r._id})">&#9998; Edit</button>
-          <button class="btn btn-sm" style="background:#805ad5;color:#fff" onclick="duplicateRecord(${r._id})">&#9986; Duplikat</button>
-          <button class="btn btn-sm" style="background:#e53e3e;color:#fff" onclick="deleteRecord(${r._id})">&#128465; Hapus</button>
+          <button class="btn btn-sm btn-info" title="Lihat" onclick="viewRecord(${r._id})">&#128065;</button>
+          <button class="btn btn-sm" style="background:#38a169;color:#fff" title="Edit" onclick="editRecord(${r._id})">&#9998;</button>
+          <button class="btn btn-sm" style="background:#805ad5;color:#fff" title="Duplikat" onclick="duplicateRecord(${r._id})">&#9986;</button>
+          <button class="btn btn-sm" style="background:#e53e3e;color:#fff" title="Hapus" onclick="deleteRecord(${r._id})">&#128465;</button>
         </div></td>
       </tr>`;
     }

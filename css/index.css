@@ -322,3 +322,14 @@ input[type=datetime-local].field-filled:focus,textarea.field-filled:focus{
 .ac-item:hover{background:#fff5ee}
 .ac-name{font-weight:600;font-size:.88rem;color:#1a1a2e}
 .ac-sub{font-size:.75rem;color:#888;margin-top:2px}
+/* ====== BLOK OUTLINE ====== */
+.blok-outline{margin:16px 0;background:#f9f6f3;border:1.5px solid #e8dcd0;border-radius:8px;overflow:hidden}
+.blok-outline-toggle{width:100%;padding:12px 16px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;color:#1a1a1a;font-family:inherit;transition:background .2s;text-align:left}
+.blok-outline-toggle:hover{background:#f0e6d8}
+.outline-arrow{display:inline-block;transition:transform .25s ease;font-size:12px}
+.blok-outline-toggle.expanded .outline-arrow{transform:rotate(0deg)}
+.blok-outline-list{max-height:500px;overflow-y:auto;background:#faf8f6;display:grid;grid-template-columns:1fr}
+.blok-outline-list.hidden{display:none}
+.outline-item{padding:8px 32px;font-size:12.5px;color:#333;cursor:pointer;border-bottom:1px solid #ede8e1;transition:all .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.outline-item:last-child{border-bottom:none}
+.outline-item:hover{background:#fff5eb;color:#dd6b20;font-weight:600}

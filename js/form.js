@@ -176,3 +176,23 @@ function markFieldFilled(el) {
   if (!el || el.readOnly || el.disabled) return;
   el.classList.toggle('field-filled', el.value.trim().length > 0);
 }
+
+/* ====== BLOK OUTLINE FUNCTIONS ====== */
+function toggleBlokOutline(btn) {
+  const list = btn.nextElementSibling;
+  const isHidden = list.classList.contains('hidden');
+  list.classList.toggle('hidden');
+  btn.classList.toggle('expanded');
+}
+
+function scrollToQuestion(qNum) {
+  const el = document.getElementById('sec-' + qNum);
+  if (el) {
+    el.scrollIntoView({behavior: 'smooth', block: 'start'});
+    el.style.backgroundColor = '#fffaeb';
+    setTimeout(() => {
+      el.style.transition = 'background-color 0.5s ease';
+      el.style.backgroundColor = 'transparent';
+    }, 100);
+  }
+}
