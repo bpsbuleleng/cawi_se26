@@ -141,14 +141,28 @@ canvas#sigCanvas{display:block;cursor:crosshair;touch-action:none}
 .sidebar-rahasia{background:#1a1a1a;color:#fff;text-align:center;font-size:8.5px;font-weight:800;letter-spacing:4px;padding:4px;text-transform:uppercase}
 .sidebar-nav-label{padding:14px 16px 5px;font-size:9px;font-weight:700;color:#bbb;letter-spacing:2.5px;text-transform:uppercase}
 /* ====== SIDEBAR NAV ITEMS ====== */
-.sidebar-item{display:flex;align-items:center;gap:11px;padding:11px 16px;cursor:pointer;border-left:3px solid transparent;transition:all .2s;color:#555;font-size:12.5px;font-weight:500;user-select:none}
+.sidebar-blok-group{display:flex;flex-direction:column}
+.sidebar-item{display:flex;align-items:center;gap:0;padding:0;cursor:default;border-left:3px solid transparent;transition:all .2s;color:#555;font-size:12.5px;font-weight:500;user-select:none}
 .sidebar-item:hover{background:#fff5ee;color:#fc6c00;border-left-color:#ffd0b0}
 .sidebar-item.active{background:#fc6c00;color:#fff;border-left-color:#d95a00;font-weight:700}
+.sidebar-item-main{display:flex;align-items:center;gap:11px;padding:11px 8px 11px 16px;flex:1;cursor:pointer}
 .sidebar-item-num{width:26px;height:26px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;transition:all .2s}
 .sidebar-item.active .sidebar-item-num{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.5);color:#fff}
 .sidebar-item-info{flex:1;line-height:1.3}
 .sidebar-item-sub{font-size:10px;color:#aaa;font-weight:400;margin-top:1px}
 .sidebar-item.active .sidebar-item-sub{color:rgba(255,255,255,.75)}
+/* Expand button */
+.sidebar-expand-btn{background:none;border:none;cursor:pointer;padding:11px 12px;font-size:10px;color:rgba(0,0,0,.3);transition:transform .22s ease,color .2s;flex-shrink:0;line-height:1}
+.sidebar-item.active .sidebar-expand-btn{color:rgba(255,255,255,.5)}
+.sidebar-item:hover .sidebar-expand-btn{color:inherit}
+.sidebar-expand-btn.open{transform:rotate(180deg)}
+.sidebar-item.active .sidebar-expand-btn.open{color:rgba(255,255,255,.9)}
+/* Question jump list */
+.sidebar-q-list{background:#f7f4f1;border-left:3px solid #fc6c00;overflow:hidden;max-height:320px;overflow-y:auto}
+.sidebar-q-list.hidden{display:none}
+.sidebar-q-item{display:block;padding:6px 16px 6px 22px;font-size:11.5px;color:#444;cursor:pointer;border-bottom:1px solid #ede8e1;transition:background .12s,color .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-q-item:last-child{border-bottom:none}
+.sidebar-q-item:hover{background:#fff5eb;color:#d95a00;font-weight:600}
 /* ====== SIDEBAR PROGRESS ====== */
 .sidebar-divider{height:1px;background:#f0ede8;margin:6px 0}
 .sidebar-progress-section{padding:12px 16px}

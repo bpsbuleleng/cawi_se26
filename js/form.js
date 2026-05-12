@@ -177,6 +177,21 @@ function markFieldFilled(el) {
   el.classList.toggle('field-filled', el.value.trim().length > 0);
 }
 
+/* ====== SIDEBAR BLOK ACCORDION ====== */
+function toggleSidebarBlok(n) {
+  const list = document.getElementById('sidebarQList' + n);
+  const btn  = document.getElementById('sidebarExpandBtn' + n);
+  if (!list) return;
+  const opening = list.classList.contains('hidden');
+  list.classList.toggle('hidden');
+  if (btn) btn.classList.toggle('open', opening);
+}
+
+function goBlokAndScroll(blokNum, qId) {
+  goBlok(blokNum);
+  setTimeout(() => scrollToQuestion(qId), 280);
+}
+
 /* ====== BLOK OUTLINE FUNCTIONS ====== */
 function toggleBlokOutline(btn) {
   const list = btn.nextElementSibling;
