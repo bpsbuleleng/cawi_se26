@@ -1,4 +1,30 @@
-let records = [];
+let records    = [];
+let _activeTab = 'all';
+
+/* ====== TAB & SIDEBAR ====== */
+function setActiveTab(tab) {
+  _activeTab = tab;
+  ['all', 'submitted', 'draft'].forEach(t => {
+    const cap = t.charAt(0).toUpperCase() + t.slice(1);
+    const sb  = document.getElementById('sidebarTab' + cap);
+    const tb  = document.getElementById('tabBar'     + cap);
+    if (sb) sb.classList.toggle('active', t === tab);
+    if (tb) tb.classList.toggle('active', t === tab);
+  });
+  closeSidebar();
+  updateStats();
+  renderTable();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
 
 /* ====== LOCAL DRAFTS (tanpa load draft.js) ====== */
 function getLocalDrafts() {
@@ -57,13 +83,12 @@ function buildPetugasFilter() {
 }
 
 function getFiltered() {
-  const q      = (document.getElementById('searchBox').value || '').toLowerCase().trim();
-  const p      = document.getElementById('filterPetugas').value;
-  const status = document.getElementById('filterStatus').value;
+  const q = (document.getElementById('searchBox').value || '').toLowerCase().trim();
+  const p = document.getElementById('filterPetugas').value;
   return records.filter(r => {
-    const okStatus  = !status
-      || (status === 'draft'     &&  r._isDraft)
-      || (status === 'submitted' && !r._isDraft);
+    const okStatus  = _activeTab === 'all'
+      || (_activeTab === 'draft'     &&  r._isDraft)
+      || (_activeTab === 'submitted' && !r._isDraft);
     const okPetugas = !p || r.petugas_nama === p;
     const okSearch  = !q
       || (r.nama_perusahaan || '').toLowerCase().includes(q)
@@ -87,11 +112,24 @@ function updateStats() {
   const filtered   = getFiltered();
   const serverRecs = records.filter(r => !r._isDraft);
   const draftRecs  = records.filter(r =>  r._isDraft);
+
   document.getElementById('statTotal').textContent    = serverRecs.length;
   document.getElementById('statDraft').textContent    = draftRecs.length;
   document.getElementById('statFiltered').textContent = filtered.length;
   const uniq = new Set(records.map(r => r.petugas_nama).filter(Boolean));
   document.getElementById('statPetugas').textContent  = uniq.size;
+
+  _setCount('sidebarTabAllCount',       records.length,      'data');
+  _setCount('sidebarTabSubmittedCount', serverRecs.length,   'entri');
+  _setCount('sidebarTabDraftCount',     draftRecs.length,    'draft');
+  _setCount('tabBarAllCount',           records.length,      null);
+  _setCount('tabBarSubmittedCount',     serverRecs.length,   null);
+  _setCount('tabBarDraftCount',         draftRecs.length,    null);
+}
+
+function _setCount(id, n, suffix) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = suffix ? `${n} ${suffix}` : String(n);
 }
 
 /* ====== RENDER TABLE ====== */
