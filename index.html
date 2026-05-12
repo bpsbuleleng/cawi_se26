@@ -44,7 +44,7 @@
   <div class="mobile-topbar-actions">
     <button class="mobile-action-btn" onclick="togglePetunjuk()">? Petunjuk</button>
     <button class="mobile-action-btn" onclick="showRecap()">&#128269; Rekap</button>
-    <button class="mobile-action-btn" onclick="logoutKuesioner()" style="color:#c53030">&#128274; Keluar</button>
+    <button class="mobile-action-btn" onclick="guardedNav(logoutKuesioner)" style="color:#c53030">&#128274; Keluar</button>
   </div>
 </div>
 
@@ -101,10 +101,13 @@
     <button class="sidebar-btn" onclick="showRecap()">
       <span class="sidebar-btn-icon">&#128269;</span> Rekap &amp; Periksa
     </button>
-    <button class="sidebar-btn" onclick="window.open('daftar.html','_blank')">
+    <button class="sidebar-btn" id="sidebarDraftBtn" onclick="saveAsDraft()">
+      <span class="sidebar-btn-icon">&#128190;</span> Simpan Draft
+    </button>
+    <button class="sidebar-btn" onclick="guardedNav('daftar.html', true)">
       <span class="sidebar-btn-icon">&#128196;</span> Daftar Entri
     </button>
-    <button class="sidebar-btn" onclick="logoutKuesioner()" style="color:#c53030">
+    <button class="sidebar-btn" onclick="guardedNav(logoutKuesioner)" style="color:#c53030">
       <span class="sidebar-btn-icon">&#128274;</span> Keluar
     </button>
   </div>
@@ -1082,6 +1085,7 @@
 
   <div class="nav-actions">
     <div></div>
+    <button type="button" class="btn-nav-draft" onclick="saveAsDraft()">&#128190; Simpan Draft</button>
     <button class="btn btn-primary" onclick="goBlok(2)">Selanjutnya: BLOK II &rsaquo;</button>
   </div>
 </div><!-- end blok1 -->
@@ -1168,6 +1172,7 @@
 
   <div class="nav-actions">
     <button class="btn btn-secondary" onclick="goBlok(1)">&lsaquo; Kembali: BLOK I</button>
+    <button type="button" class="btn-nav-draft" onclick="saveAsDraft()">&#128190; Simpan Draft</button>
     <button class="btn btn-primary" onclick="goBlok(3)">Selanjutnya: BLOK III &rsaquo;</button>
   </div>
 </div><!-- end blok2 -->
@@ -1241,19 +1246,12 @@
 
       <div id="submitAlert" class="alert alert-error hidden" style="margin-top:14px"></div>
 
-      <div style="margin-top:24px;text-align:center">
-        <p style="font-size:12px;color:#aaa;margin-bottom:12px">Dengan menekan tombol KIRIM, Anda menyatakan bahwa data yang diisikan adalah benar dan dapat dipertanggungjawabkan.</p>
-        <button class="btn btn-primary" id="submitBtn" onclick="showRecap()" style="padding:14px 60px;font-size:16px;letter-spacing:1px;border-radius:8px;box-shadow:0 4px 20px rgba(252,108,0,.45)">
-          &#128228; &nbsp;KIRIM / SUBMIT
-        </button>
-        <div style="margin-top:14px">
-          <button id="saveDraftBtn" type="button" onclick="saveAsDraft()"
-            style="background:#fff;border:2px solid #dd6b20;color:#dd6b20;padding:10px 28px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s"
-            onmouseover="this.style.background='#fff5eb'" onmouseout="this.style.background='#fff'">
-            &#128190; Simpan sebagai Draft
-          </button>
-          <p style="font-size:11px;color:#bbb;margin-top:6px">Draft tersimpan di perangkat ini dan bisa dilanjutkan dari halaman Daftar.</p>
+      <div style="margin-top:20px">
+        <div class="submit-actions">
+          <button id="saveDraftBtn" type="button" class="btn-draft-inline" onclick="saveAsDraft()">&#128190; Simpan Draft</button>
+          <button class="btn btn-primary btn-submit-compact" id="submitBtn" onclick="showRecap()">&#128228; KIRIM / SUBMIT</button>
         </div>
+        <p class="submit-note">Dengan menekan KIRIM, Anda menyatakan data yang diisikan adalah benar dan dapat dipertanggungjawabkan.</p>
       </div>
 
     </div>
@@ -1261,6 +1259,7 @@
 
   <div class="nav-actions">
     <button class="btn btn-secondary" onclick="goBlok(2)">&lsaquo; Kembali: BLOK II</button>
+    <button type="button" class="btn-nav-draft" onclick="saveAsDraft()">&#128190; Simpan Draft</button>
     <div></div>
   </div>
 </div><!-- end blok3 -->
@@ -1378,6 +1377,17 @@
   <div style="max-width:700px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
     <span style="font-size:13px;flex:1;min-width:200px">&#9998; <strong>Mode Edit</strong> — periksa dan ubah data, lalu kirim. Pengiriman akan <strong>menimpa rekaman asli</strong>.</span>
     <button onclick="cancelEditMode()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit">&#10005; Batal</button>
+  </div>
+</div>
+<!-- LEAVE GUARD MODAL -->
+<div class="modal-overlay" id="leaveGuardOverlay" onclick="leaveGuardCancel()"></div>
+<div class="leave-guard-modal" id="leaveGuardModal">
+  <div class="leave-guard-title">&#128190; Simpan progress sebelum keluar?</div>
+  <div class="leave-guard-sub">Isian form belum disimpan sebagai draft. Simpan dulu agar bisa dilanjutkan nanti dari halaman Daftar.</div>
+  <div class="leave-guard-btns">
+    <button class="btn-save" onclick="leaveGuardSave()">&#128190; Simpan Draft &amp; Keluar</button>
+    <button class="btn-leave" onclick="leaveGuardGo()">Keluar Tanpa Simpan</button>
+    <button class="btn-cancel" onclick="leaveGuardCancel()">Batal, Tetap di Sini</button>
   </div>
 </div>
 <script src="js/config.js"></script>

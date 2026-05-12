@@ -296,6 +296,27 @@ input[type=datetime-local].field-filled:focus,textarea.field-filled:focus{
 .ac-drop{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1.5px solid #fc6c00;
   border-radius:0 0 8px 8px;max-height:240px;overflow-y:auto;z-index:200;
   box-shadow:0 8px 24px rgba(0,0,0,.15);display:none}
+/* ====== SUBMIT ACTIONS ====== */
+.submit-actions{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn-submit-compact{padding:11px 32px;font-size:14px}
+.btn-draft-inline{background:#fff;border:1.5px solid #dd6b20;color:#dd6b20;padding:11px 20px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-draft-inline:hover{background:#fff5eb;border-color:#c05621}
+.submit-note{font-size:11.5px;color:#bbb;text-align:center;margin-top:10px;line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto}
+/* ====== NAV DRAFT BUTTON ====== */
+.btn-nav-draft{background:transparent;border:1.5px solid #dd6b20;color:#dd6b20;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-nav-draft:hover{background:#fff5eb}
+/* ====== LEAVE GUARD MODAL ====== */
+.leave-guard-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-60%);width:min(400px,calc(100vw - 32px));background:#fff;border-radius:12px;padding:28px 24px;z-index:420;box-shadow:0 20px 60px rgba(0,0,0,.3);transition:transform .25s ease,opacity .25s ease;opacity:0;pointer-events:none}
+.leave-guard-modal.open{transform:translate(-50%,-50%);opacity:1;pointer-events:all}
+.leave-guard-title{font-size:15px;font-weight:800;color:#1a1a1a;margin-bottom:6px}
+.leave-guard-sub{font-size:12.5px;color:#666;line-height:1.6;margin-bottom:20px}
+.leave-guard-btns{display:flex;flex-direction:column;gap:8px}
+.leave-guard-btns .btn-save{background:#dd6b20;color:#fff;border:none;padding:11px 16px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;width:100%;text-align:center}
+.leave-guard-btns .btn-save:hover{background:#c05621}
+.leave-guard-btns .btn-leave{background:#f5f2ee;color:#555;border:1px solid #ddd;padding:10px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;width:100%;text-align:center}
+.leave-guard-btns .btn-leave:hover{background:#e8e2dc}
+.leave-guard-btns .btn-cancel{background:none;color:#aaa;border:none;padding:8px 16px;border-radius:7px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s;width:100%;text-align:center}
+.leave-guard-btns .btn-cancel:hover{color:#555}
 .ac-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid #f5f5f5}
 .ac-item:last-child{border-bottom:none}
 .ac-item:hover{background:#fff5ee}

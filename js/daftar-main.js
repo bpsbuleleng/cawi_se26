@@ -191,7 +191,7 @@ function renderTable() {
       html += `<tr>
         <td data-label="No" style="color:#aaa;font-size:12px;text-align:center">${idx+1}</td>
         <td data-label="Perusahaan" class="cell-company">
-          ${co}<span class="badge-submitted">TERSUBMIT</span>${koml}
+          ${co}${koml}
         </td>
         <td data-label="Petugas" class="cell-petugas">${esc(r.petugas_nama||'—')}
           ${r.petugas_nip ? `<small>NIP: ${esc(r.petugas_nip)}</small>` : ''}</td>
